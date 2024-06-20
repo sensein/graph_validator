@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "graph validator"
+version = "0.0.1"
+description = "This package validates the conformance of the JSON-LD or turtle data against the given ontology."
+authors = ["Tek Raj Chhetri <tekrajchhetri@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+owlready2 = "^0.46"
+owlrl = "^6.0.2"
+rdflib = "^7.0.0"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.2"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
