@@ -62,7 +62,13 @@ def load_graph(file_path, format="json-ld"):
     :param file_path: str
         The path to the file containing the RDF graph.
     :param format: str, optional
-        The format of the RDF graph, such as 'json-ld', 'turtle', 'xml', etc.
+        The format of the RDF graph, "json-ld", "turtle", "n3", "nt", "rdfxml", "trig"
+        json-ld: https://json-ld.org/
+        turtle: https://www.w3.org/TR/turtle/
+        n3: https://www.w3.org/TeamSubmission/n3/
+        nt: https://www.w3.org/TR/n-triples/
+        rdfxml:https://www.w3.org/TR/rdf-syntax-grammar/
+        trig: https://www.w3.org/TR/trig/
         Default is 'json-ld'.
     :return: rdflib.graph.Graph
         The RDF graph loaded from the file.
@@ -71,7 +77,7 @@ def load_graph(file_path, format="json-ld"):
     :raises Exception: For other parsing errors.
     """
     logger = logging.getLogger("load_graph")
-    supported_formats = ["json-ld", "turtle", "xml", "n3", "nt", "rdfxml", "trig"]
+    supported_formats = ["json-ld", "turtle", "n3", "nt", "rdfxml", "trig"]
 
     if format not in supported_formats:
         logger.error(
