@@ -17,16 +17,8 @@
 # @Software: PyCharm
 
 
-import json
-from rdflib import Graph, URIRef
-from rdflib.plugins.parsers.notation3 import BadSyntax
-from rdflib.plugin import register, Parser
-from rdflib.namespace import RDF, OWL, RDFS
-import owlrl
-from rdflib import Graph, Namespace, URIRef
+from rdflib import Graph
 from owlready2 import get_ontology, default_world
-from rdflib.namespace import RDF, RDFS, XSD
-from rdflib.compare import graph_diff, to_isomorphic
 from core.helper import load_yaml_config, apply_logging_configuration
 import logging
 
@@ -62,7 +54,8 @@ def perform_reasoning(ontology):
     except Exception as e:
         logger.error(f"An error occurred during reasoning: {e}")
 
-def load_graph(file_path, format='json-ld'):
+
+def load_graph(file_path, format="json-ld"):
     """
     Load an RDF graph from a file in various formats such as JSON-LD or Turtle.
 
@@ -78,11 +71,15 @@ def load_graph(file_path, format='json-ld'):
     :raises Exception: For other parsing errors.
     """
     logger = logging.getLogger("load_graph")
-    supported_formats = ['json-ld', 'turtle', 'xml', 'n3', 'nt', 'rdfxml', 'trig']
+    supported_formats = ["json-ld", "turtle", "xml", "n3", "nt", "rdfxml", "trig"]
 
     if format not in supported_formats:
-        logger.error(f"Unsupported format: {format}. Supported formats are: {', '.join(supported_formats)}")
-        raise ValueError(f"Unsupported format: {format}. Supported formats are: {', '.join(supported_formats)}")
+        logger.error(
+            f"Unsupported format: {format}. Supported formats are: {', '.join(supported_formats)}"
+        )
+        raise ValueError(
+            f"Unsupported format: {format}. Supported formats are: {', '.join(supported_formats)}"
+        )
 
     graph = Graph()
 
@@ -93,5 +90,9 @@ def load_graph(file_path, format='json-ld'):
         logger.error(f"Error reading file {file_path}: {e}")
         raise IOError(f"Error reading file {file_path}: {e}")
     except Exception as e:
-        logger.error(f"Error parsing graph from file {file_path} in format {format}: {e}")
-        raise Exception(f"Error parsing graph from file {file_path} in format {format}: {e}")
+        logger.error(
+            f"Error parsing graph from file {file_path} in format {format}: {e}"
+        )
+        raise Exception(
+            f"Error parsing graph from file {file_path} in format {format}: {e}"
+        )
