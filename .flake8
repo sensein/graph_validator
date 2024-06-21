@@ -1,0 +1,5 @@
+[flake8]
+# line too long (82 > 79 characters) messsage because these are methods name, uri, etc.
+extend-ignore = E501
+# This sets a reasonable line length limit if desired
+max-line-length = 100
