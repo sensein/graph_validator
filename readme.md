@@ -23,3 +23,8 @@ poetry run pre-commit run --all-files
 poetry run pre-commit autoupdate
 
 ```
+
+## Running tests
+```bash
+ poetry run pytest
+```
