@@ -36,16 +36,22 @@ def load_ontology(file_path):
 
 def perform_reasoning(ontology):
     """
-    Perform reasoning on the given ontology to check its consistency using the default world.
+    Perform reasoning on the given ontology to check its consistency using the default world and pallet reasoner.
+
+    https://owlready2.readthedocs.io/en/latest/reasoning.html
+
+    Sirin, E., Parsia, B., Grau, B.C., Kalyanpur, A. and Katz, Y., 2007. Pellet: A practical owl-dl reasoner. Journal of Web Semantics, 5(2), pp.51-53.
 
     This function uses the default world in `owlready2` to perform reasoning on the specified ontology.
     For more information, see: https://owlready2.readthedocs.io/en/latest/world.html
 
     :param ontology: owlready2.namespace.Ontology
         The ontology to perform reasoning on.
-    :return: None
+    :return: dict
+        The status of the reasoning along with the reasoning message
     """
     logger = logging.getLogger("perform_reasoning")
+    reasoning_message = {}
     try:
         with ontology:
             logger.info("Starting reasoning on the ontology...")
@@ -53,8 +59,13 @@ def perform_reasoning(ontology):
                 infer_property_values=True, infer_data_property_values=True
             )
             logger.info("End reasoning on the ontology...")
+            reasoning_message["message"] = "Success"
+            reasoning_message["status"] = True
     except Exception as e:
         logger.error(f"An error occurred during reasoning: {e}")
+        reasoning_message["status"] = True
+        reasoning_message["message"] = f"{e}"
+    return reasoning_message
 
 
 def load_graph(file_path, format="json-ld"):
