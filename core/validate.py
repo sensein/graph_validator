@@ -18,7 +18,7 @@
 
 
 from rdflib import Graph
-from owlready2 import get_ontology, default_world
+from owlready2 import get_ontology, sync_reasoner_pellet
 from core.helper import load_yaml_config, apply_logging_configuration
 import logging
 
@@ -49,7 +49,9 @@ def perform_reasoning(ontology):
     try:
         with ontology:
             logger.info("Starting reasoning on the ontology...")
-            default_world.reason()
+            sync_reasoner_pellet(
+                infer_property_values=True, infer_data_property_values=True
+            )
             logger.info("End reasoning on the ontology...")
     except Exception as e:
         logger.error(f"An error occurred during reasoning: {e}")
