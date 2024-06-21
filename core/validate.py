@@ -22,14 +22,14 @@ from owlready2 import get_ontology, default_world
 from core.helper import load_yaml_config, apply_logging_configuration
 import logging
 
-config = load_yaml_config("local_config.yml")
+config = load_yaml_config("logging_config.yaml")
 apply_logging_configuration(config)
 
 
 def load_ontology(file_path):
     """Load ontology
     :param file_path: str
-    :return owlready2.Ontology
+    :return owlready2.namespace.Ontology
     """
     return get_ontology(file_path).load()
 
@@ -41,7 +41,7 @@ def perform_reasoning(ontology):
     This function uses the default world in `owlready2` to perform reasoning on the specified ontology.
     For more information, see: https://owlready2.readthedocs.io/en/latest/world.html
 
-    :param ontology: owlready2.Ontology
+    :param ontology: owlready2.namespace.Ontology
         The ontology to perform reasoning on.
     :return: None
     """
