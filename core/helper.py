@@ -17,6 +17,7 @@
 # @Software: PyCharm
 import logging
 import yaml
+import logging.config
 
 
 def load_yaml_config(file_path):
