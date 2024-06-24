@@ -179,3 +179,22 @@ def check_provenance_basics(turtle_file_path: str) -> bool:
             return True
 
     return False
+
+
+def check_data_consistency(input_triple):
+    """
+    Check for data consistency issues such as conflicting triples.
+    :param input_triple:
+    :return:
+    """
+    pass
+
+
+def check_data_integrity(input_triple):
+    """
+    Check for data integrity like unique identifier and referential integrity check
+        Read more here about referential integrity:  https://link.springer.com/chapter/10.1007/3-540-45810-7_29
+    :param input_triple:
+    :return:
+    """
+    pass
