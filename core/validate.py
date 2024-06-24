@@ -17,10 +17,11 @@
 # @Software: PyCharm
 
 
-from rdflib import Graph
+from rdflib import Graph, Namespace
 from owlready2 import get_ontology, sync_reasoner_pellet
 from core.helper import load_yaml_config, apply_logging_configuration
 import logging
+from rdflib.plugin import PluginException
 
 config = load_yaml_config("logging_config.yaml")
 apply_logging_configuration(config)
@@ -103,7 +104,7 @@ def load_graph(file_path, format="json-ld"):
     graph = Graph()
 
     try:
-        graph.parse(file_path, format=format)
+        graph.parse(data=file_path, format=format)
         return graph
     except IOError as e:
         logger.error(f"Error reading file {file_path}: {e}")
@@ -115,3 +116,66 @@ def load_graph(file_path, format="json-ld"):
         raise Exception(
             f"Error parsing graph from file {file_path} in format {format}: {e}"
         )
+
+
+def serialize_graph_to_turtle(input_graph: str, input_format: str) -> str:
+    """
+    Serialize the input graph from various formats like RDF/XML, N3, JSON-LD to Turtle format.
+
+    :param input_graph: Input graph as a string in various formats (RDF/XML, N3, JSON-LD).
+    :param input_format: The format of the input graph (e.g., 'xml', 'n3', 'json-ld').
+    :return: The serialized graph in Turtle format as a string.
+    :raises ValueError: If there is an error in parsing or serialization.
+    """
+    logger = logging.getLogger("perform_reasoning")
+    graph = Graph()
+    try:
+        graph.parse(data=input_graph, format=input_format)
+        turtle_data = graph.serialize(format="turtle")
+        logger.info("Successfully serialized to Turtle format.")
+        return turtle_data
+    except PluginException as e:
+        logger.error(f"Failed to parse or serialize graph: {e}")
+        raise ValueError(f"Failed to parse or serialize graph: {e}")
+    except Exception as e:
+        logger.error(f"An unexpected error occurred: {e}")
+        raise ValueError(f"An unexpected error occurred: {e}")
+
+
+def check_provenance_basics(turtle_file_path: str) -> bool:
+    """
+    Checks if there exists any provenance information in the supplied Turtle file using the PROV ontology.
+
+    :param turtle_file_path: Path to the input file in Turtle format.
+    :return: Boolean indicating whether provenance information exists. True means provenance information is found.
+    """
+    logger = logging.getLogger("check_provenance_basics")
+    try:
+        graph = Graph()
+        graph.parse(turtle_file_path, format="turtle")
+    except Exception as e:
+        logger.error(f"Error parsing Turtle file: {e}")
+        return False
+
+    PROV_NAMESPACE = Namespace("http://www.w3.org/ns/prov#")
+
+    prov_ontology_elements = [
+        PROV_NAMESPACE.Agent,
+        PROV_NAMESPACE.Entity,
+        PROV_NAMESPACE.Activity,
+        PROV_NAMESPACE.Used,
+        PROV_NAMESPACE.WasGeneratedBy,
+        PROV_NAMESPACE.WasDerivedFrom,
+        PROV_NAMESPACE.WasAttributedTo,
+        PROV_NAMESPACE.WasAssociatedWith,
+    ]
+
+    for element in prov_ontology_elements:
+        if (
+            (element, None, None) in graph
+            or (None, element, None) in graph
+            or (None, None, element) in graph
+        ):
+            return True
+
+    return False
